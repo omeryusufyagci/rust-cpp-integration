@@ -1,0 +1,3 @@
+[submodule "rusty_lib"]
+	path = rusty_lib
+	url = git@github.com:omeryusufyagci/rusty_lib.git
