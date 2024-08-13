@@ -1,75 +1,44 @@
 
-# Rust and C++ Integration Example
+# Rust and C++ Integration Examples
+This project offers a collection of working examples that demonstrate how to integrate a Rust library into an existing C++ codebase as a shared object. These examples range from basic integration techniques to more advanced patterns, aiming to provide a comprehensive catalogue of Rust-C++ interoperability examples.
 
-This project gives an example on how a Rust library can be integrated into an existing C++ code base, linked as a shared object. 
+The idea for this project came from real-world challenges I encountered while integrating a new Rust library into a legacy C++ codebase. My hope is that these examples will help you understand the principles and mechanisms behind successful Rust-C++ integration.
 
-I decided to make this available here, after integrating a new Rust library into an existing, legacy C++ codebase. 
-
-It's surprisingly straight forward, and I hope it helps you to grasp the principal mechanism of this project.
+I invite you to contribute your own examples to help build a robust catalog of solutions for scenarios that are likely to arise during integrating real-world projects.
 
 ## Project Structure
 
-- **cpp_user/**: An example C++ project that will be the user of the Rust library. It demonstrates how to wrap the Rust struct and extend them in C++. 
-- **rusty_lib/**: A hello world Rust library that will be treated as if it's a base class by the user. 
-- **Dockerfile.rhel9**: I chose RHEL9 to be the source image, where I am building the library
-- **Dockerfile.ubuntu**: Similarly, I chose Ubuntu to be the target. Different distros to showcase rust builds for architecture, which allows for great flexibility. 
+* **examples/**: Contains multiple example projects that demonstrate different aspects of Rust and C++ integration. Each sub-directory includes a README with documentation.
+   * **basic_integration/**: A simple example demonstrating basic Rust-C++ integration.
+   * **concurrency_example/**: A batch processing example showcasing concurrency-safe interoperability between Rust and C++.
+   * **producer_consumer_example/**: An advanced example implementing the producer-consumer pattern using Rust and C++.
+* **scripts/**: Contains helper script(s) for building and running the examples.
+* **Dockerfile.rhel9**: Dockerfile for building the Rust libraries in a RHEL9 environment.
+* **Dockerfile.ubuntu**: Dockerfile for compiling and running the C++ code in an Ubuntu environment.
 
-## Step-by-Step Guide
+## Getting Started
 
-Ensure you're on project root, and follow along
+The repo comes with a launcher script that builds and runs the docker containers for you.
 
-### Step 1: Build the Rust Library in a RHEL-based Docker Container
-
-1. **Build the Docker Image**:
-   ```
-   docker build -t rust_lib_builder -f Dockerfile.rhel9 .
-   ```
-
-2. **Run the Docker Container** to build the Rust library:
-   ```
-   docker run --name rust_lib_builder_container rust_lib_builder
-   ```
-
-3. **Copy the shared object** to your local `lib/` directory:
-   ```
-   docker cp rust_lib_builder_container:/usr/src/rust_lib/target/x86_64-unknown-linux-gnu/release/librusty_lib.so ./cpp_user/lib/
-   ```
-
-### Step 2: Build and Run the C++ Project in an Ubuntu-based Docker Container
-
-1. **Build the Docker Image**:
-   ```
-   docker build -t cpp_project_tester -f Dockerfile.ubuntu .
-   ```
-
-2. **Run the Docker Container** to compile and execute the C++ code:
-   ```
-   docker run --rm cpp_project_tester
-   ```
-
-### Expected Output
-
-If everything is set up correctly, you should see the following output:
-
-```
-CustomGreeter says: Hello from C++, extending a Rust Struct!
-Hello from RustGreeter! My name is Stack Allocated C++ User
-CustomGreeter says: Hello from C++, extending a Rust Struct!
-Hello from RustGreeter! My name is Heap Allocated C++ User
-CustomGreeter says: Hello from C++, extending a Rust Struct!
-Hello from RustGreeter! My name is Smart Pointer C++ User
+1. **Start the launcher**:
+```bash
+scripts/launcher.sh
 ```
 
-## Explanation
+2. **Select an Example**: The launcher will prompt you to select an example from the list below:
+* Basic Integration Example
+* Concurrency Example
+* Producer-Consumer Example
 
-- **Rust Code**: Implements a `RustGreeter` struct and a `Greeter` trait, with functions exposed to C++ via FFI (Foreign Function Interface).
-- **C++ Code**: Uses the Rust library by calling the FFI functions, and demonstrates stack, heap, and smart pointer allocations.
-- **Docker**: Used to build the Rust library in a RHEL environment and then compile and run the C++ code in an Ubuntu environment, showcasing cross-platform compatibility.
+3. **Enjoy Your Sandbox!**: 
+* The launcher will build and run your selected example. 
+* Monitor to output to understand how it works; modify the code and re-run to quickly protoype your custom implementations!
 
-## Troubleshooting
+## Contributing
 
-- **Shared Library Not Found**: If you encounter an error about `librusty_lib.so` not being found, ensure the `LD_LIBRARY_PATH` is correctly set in the Dockerfile.
-- **Linking Errors**: Ensure that the Rust functions are declared with `extern "C"` and that the `Makefile` correctly includes and links all necessary files.
+Contributions to this project are encouraged and greatly appreciated. If you have an example that showcases Rust-C++ interoperability, or improvements to existing examples, please share them.
+
+**How to Contribute**: Please fork this repository, add your changes in a new branch, test that they work, and submit a pull request.
 
 ## LICENSE
 
