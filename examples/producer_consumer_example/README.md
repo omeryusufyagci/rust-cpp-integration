@@ -44,3 +44,8 @@ C++ finished TASK-9
 Rust produced: TASK-10
 C++ finished TASK-10
 ```
+
+## Explanation
+* **Rust Code**: Rust acts as the producer, generating a predefined number of tasks and placing them into a thread-safe queue. The queue is protected by a mutex to ensure access safety. A condition variable is used to notify the C++ consumer when new tasks are available. This setup ensures that Rust can safely and efficiently produce tasks without interfering with the C++ side.
+* **C++ Code**: C++ acts as the consumer, retrieving tasks from the queue and processing them. The consumer waits for tasks to be available, processes each task, and then waits for the next one. The condition variable used by Rust ensures that C++ is notified as soon as a new task is ready, allowing for efficient task processing without busy-waiting.
+* **Producer-Consumer Pattern**: This example demonstrates a typical producer-consumer pattern in a multi-threaded, cross-language context. Rust and C++ work together to manage shared resources, with Rust producing tasks and C++ consuming them. The use of mutexes and condition variables ensures that the two languages operate efficiently and safely in a concurrent environment.

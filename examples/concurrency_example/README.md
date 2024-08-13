@@ -44,3 +44,8 @@ C++: Running average temperature: 22.2475
 Rust: Generated temperature: 23.22
 C++: Running average temperature: 22.3448
 ```
+
+## Explanation
+* **Rust Code**: In this example, Rust is responsible for generating mock temperature data in a separate thread, simulating sensor readings. The data is stored in a thread-safe buffer, which is protected by a mutex to ensure safe access from multiple threads. Rust uses a condition variable to notify C++ when new data is available, ensuring that the C++ side only processes fully generated data.
+* **C++ Code**: C++ processes the mock temperature data produced by Rust, calculating a running average. The synchronization between Rust and C++ ensures that data is fully generated before being processed, preventing race conditions and ensuring data consistency.
+* **Synchronization Mechanisms**: This example uses mutexes and condition variables to manage concurrency. Rust produces the data and notifies C++ when the data is ready for processing. C++ waits for this signal, processes the data, and then waits for the next signal, ensuring that both languages operate in sync.
