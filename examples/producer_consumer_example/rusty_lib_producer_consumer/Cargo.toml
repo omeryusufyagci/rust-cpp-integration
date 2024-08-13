@@ -1,0 +1,9 @@
+[package]
+name = "rusty_lib_producer_consumer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[lib]
+crate-type = ["cdylib"]

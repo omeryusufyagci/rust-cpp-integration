@@ -1,0 +1,26 @@
+# Dockerfile.rhel9 for producer-consumer example
+
+FROM registry.access.redhat.com/ubi9/ubi:latest
+
+# --allowerasing to avoid conflicts
+RUN yum install -y --allowerasing \
+    gcc \
+    make \
+    curl \
+    git \
+    && yum clean all
+
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+WORKDIR /usr/src/rusty_lib_producer_consumer
+
+# Copy the Rust source to the container
+COPY rusty_lib_producer_consumer/ .
+
+# Build the Rust library for x86_64 arch and display verbose output
+RUN cargo build --release --target=x86_64-unknown-linux-gnu --verbose
+
+# Output path to store the .so file
+RUN mkdir /usr/src/output
+RUN cp /usr/src/rusty_lib_producer_consumer/target/x86_64-unknown-linux-gnu/release/librusty_lib_producer_consumer.so /usr/src/output/

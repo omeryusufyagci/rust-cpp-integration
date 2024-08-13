@@ -1,0 +1,27 @@
+# Here, on an Ubuntu, I am using the producer-consumer Rust lib that was built on the RHEL9 docker.
+
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    make \
+    curl \
+    git \
+    && apt-get clean
+
+WORKDIR /usr/src/cpp_user_producer_consumer
+
+# Copy the C++ producer-consumer example project to the container
+COPY cpp_user_producer_consumer/ .
+
+# Copy the .so from the mounted volume
+COPY --from=rust_producer_consumer_builder /usr/src/output/librusty_lib_producer_consumer.so ./lib/
+
+# LD_LIBRARY_PATH to include the lib
+ENV LD_LIBRARY_PATH=/usr/src/cpp_user_producer_consumer/lib:$LD_LIBRARY_PATH
+
+RUN make
+
+# Run the example program to see the output
+CMD ["./bin/producer_consumer_example"]
