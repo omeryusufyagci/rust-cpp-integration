@@ -9,28 +9,36 @@ echo "3) Producer-Consumer Example"
 read -p "Enter choice [1-3]: " choice
 
 case $choice in
+# TODO: provide a utility that will auto-generate the variables from example dir name. 
+# Probably will require following naming conventions for examples
+
     1)
-        echo "Building and running Basic Integration Example..."
-        (cd examples/basic_integration_example && docker build -t rust_lib_builder -f Dockerfile.rhel9 .)
-        docker run --rm rust_lib_builder
-        (cd examples/basic_integration_example && docker build -t cpp_project_tester -f Dockerfile.ubuntu .)
-        docker run --rm cpp_project_tester
+        RUST_LIB_DIR="examples/basic_integration_example/rusty_lib"
+        CPP_PROJECT_DIR="examples/basic_integration_example/cpp_user"
+        BINARY_NAME="greeter_example"
         ;;
     2)
-        echo "Building and running Concurrency Example..."
-        (cd examples/concurrency_example && docker build -t rust_concurrent_lib_builder -f Dockerfile.rhel9 .)
-        docker run --rm rust_concurrent_lib_builder
-        (cd examples/concurrency_example && docker build -t cpp_concurrent_project_tester -f Dockerfile.ubuntu .)
-        docker run --rm cpp_concurrent_project_tester
+        RUST_LIB_DIR="examples/concurrency_example/rusty_lib_concurrent"
+        CPP_PROJECT_DIR="examples/concurrency_example/cpp_user_concurrent"
+        BINARY_NAME="concurrency_example"
         ;;
     3)
-        echo "Building and running Producer-Consumer Example..."
-        (cd examples/producer_consumer_example && docker build -t rust_producer_consumer_builder -f Dockerfile.rhel9 .)
-        docker run --rm rust_producer_consumer_builder
-        (cd examples/producer_consumer_example && docker build -t cpp_producer_consumer_tester -f Dockerfile.ubuntu .)
-        docker run --rm cpp_producer_consumer_tester
+        RUST_LIB_DIR="examples/producer_consumer_example/rusty_lib_producer_consumer"
+        CPP_PROJECT_DIR="examples/producer_consumer_example/cpp_user_producer_consumer"
+        BINARY_NAME="producer_consumer_example"
         ;;
     *)
         echo "Invalid choice."
+        exit 1
         ;;
 esac
+
+echo "Building and running ${CPP_PROJECT_DIR} with Rust library ${RUST_LIB_DIR} and binary ${BINARY_NAME}..."
+
+docker build \
+    --build-arg RUST_LIB_DIR=${RUST_LIB_DIR} \
+    --build-arg CPP_PROJECT_DIR=${CPP_PROJECT_DIR} \
+    --build-arg BINARY_NAME=${BINARY_NAME} \
+    -t rust_cpp_example .
+
+docker run --rm rust_cpp_example
