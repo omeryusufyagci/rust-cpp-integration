@@ -43,7 +43,7 @@ pub extern "C" fn greeter_say_hello(greeter: *mut RustGreeter) {
 pub extern "C" fn destroy_greeter(greeter: *mut RustGreeter) {
     if !greeter.is_null() {
         unsafe {
-            Box::from_raw(greeter);
+            drop(Box::from_raw(greeter));
         }
     }
 }

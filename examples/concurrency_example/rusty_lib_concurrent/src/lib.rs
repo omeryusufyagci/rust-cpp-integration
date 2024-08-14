@@ -108,6 +108,6 @@ pub extern "C" fn wait_for_data(sensor: *mut TemperatureSensor) {
 #[no_mangle]
 pub extern "C" fn free_readings(readings: *mut f32) {
     unsafe {
-        let _ = Box::from_raw(readings); // Reclaim the memory allocated by C++ for the buffer (definition is needed for successful reclaim)
+        drop(Box::from_raw(readings)); // Reclaim the memory allocated by C++ for the buffer
     }
 }
