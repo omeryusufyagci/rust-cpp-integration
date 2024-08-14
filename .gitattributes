@@ -1,0 +1,4 @@
+*.rs linguist-language=Rust
+
+*.cpp linguist-language=C++
+*.h   linguist-language=C++
