@@ -7,7 +7,7 @@ On the Rust side, mock temperature sensor data is generated, which is then batch
 While this example serves as an entry point for experimenting with concurrency-safe interop between the two languages, for more advanced use cases, please see the `producer_consumer_example`, which more closely follows the producer-consumer pattern.
 
 ## Key Concepts
-* Batch Processing with Synchronization: Demonstrates basic synchronization to ensure that data is fully generated in Rust before being processed in C++
+* Batch Processing with Synchronization: Demonstrates basic cross-language synchronization to ensure that data is fully generated in Rust before being processed in C++
 * Introduction to Cross-Language Integration: The example illustrates how to share data, manage memory, and synchronize operations between Rust and C++.
 
 ## How to run
