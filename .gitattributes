@@ -1,4 +1,3 @@
-*.rs linguist-language=Rust
-
-*.cpp linguist-language=C++
-*.h   linguist-language=C++
+/examples/**/*.rs linguist-language=Rust
+/examples/**/*.cpp linguist-language=C++
+/examples/**/*.h linguist-language=C++
